@@ -176,7 +176,7 @@ import {
 	type WorktreeExitPlan,
 } from "../session/session-worktree";
 import type { ShakeMode } from "../session/shake-types";
-import { BUILTIN_SLASH_COMMAND_RESERVED_NAMES, buildTuiBuiltinSlashCommands } from "../slash-commands/builtin-registry";
+import { buildTuiBuiltinSlashCommands, getBuiltinSlashCommandReservedNames } from "../slash-commands/builtin-registry";
 import { buildStaticInlineHint } from "../slash-commands/builtin-completions";
 import { formatCoarseDuration } from "@oh-my-pi/pi-tui/chrome/format";
 import { type DictationTarget, MicCursor, type SttCallbacks, STTController, type SttState } from "../stt";
@@ -3088,7 +3088,7 @@ export class InteractiveMode implements InteractiveModeContext {
 		}));
 
 		const hookCommands: SlashCommand[] = (
-			this.session.extensionRunner?.getRegisteredCommands(BUILTIN_SLASH_COMMAND_RESERVED_NAMES) ?? []
+			this.session.extensionRunner?.getRegisteredCommands(getBuiltinSlashCommandReservedNames()) ?? []
 		).map(cmd => ({
 			name: cmd.name,
 			description: cmd.description ?? "(hook command)",

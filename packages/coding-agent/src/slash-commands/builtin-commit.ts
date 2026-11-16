@@ -1,8 +1,10 @@
 import * as vcs from "@oh-my-pi/pi-natives/vcs";
 import { prompt } from "@oh-my-pi/pi-utils";
 import { draftFor } from "../commit/selective/prelude-definition";
+import { isSettingsInitialized, settings } from "../config/settings";
 import commitRequestTemplate from "../prompts/commit-request.md" with { type: "text" };
 import { MAIN_AGENT_ID } from "../registry/agent-registry";
+import { cfgCommitEnabled } from "../tools/settings";
 import { errorMessage, usage } from "./helpers/parse";
 import type { SlashCommandSpec } from "./types";
 
@@ -17,6 +19,8 @@ export const BUILTIN_COMMIT_SLASH_COMMANDS: ReadonlyArray<SlashCommandSpec> = [
 		description: "Commit only the changes this agent and its subagents made",
 		inlineHint: "[instructions]",
 		allowArgs: true,
+		// Disabled: absent from autocomplete and dispatch, so a user-defined `/commit` is not shadowed.
+		enabled: () => !isSettingsInitialized() || cfgCommitEnabled.get(settings) === true,
 		handle: async (command, runtime) => {
 			if (!runtime.session.getAdvertisedEvalPreludes().some(prelude => prelude.name === "commit")) {
 				return usage("/commit needs the eval tool and the `commit.enabled` setting.", runtime);
