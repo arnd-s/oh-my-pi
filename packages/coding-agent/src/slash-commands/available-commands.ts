@@ -5,8 +5,8 @@ import type { LoadedCustomCommand } from "../extensibility/custom-commands";
 import type { ExtensionRunner } from "../extensibility/extensions";
 import { getSkillSlashCommandName, type Skill } from "../extensibility/skills";
 import { type FileSlashCommand, loadSlashCommands } from "../extensibility/slash-commands";
-import { ACP_BUILTIN_RESERVED_NAMES, isAcpBuiltinShadowedName } from "./acp-builtins";
-import { BUILTIN_SLASH_COMMANDS_INTERNAL } from "./builtin-registry";
+import { getAcpBuiltinReservedNames, isAcpBuiltinShadowedName } from "./acp-builtins";
+import { getEnabledBuiltinSlashCommands } from "./builtin-registry";
 
 export type AvailableSlashCommandSource = "builtin" | "skill" | "extension" | "custom" | "mcp_prompt" | "file";
 
@@ -43,7 +43,7 @@ export async function buildAvailableSlashCommands(
 		commands.push(command);
 	};
 
-	for (const command of BUILTIN_SLASH_COMMANDS_INTERNAL) {
+	for (const command of getEnabledBuiltinSlashCommands()) {
 		if (!command.handle) continue;
 		const hint = command.acpInputHint ?? command.inlineHint;
 		appendCommand({
@@ -74,7 +74,7 @@ export async function buildAvailableSlashCommands(
 
 	const runner = session.extensionRunner;
 	if (runner) {
-		for (const command of runner.getRegisteredCommands(ACP_BUILTIN_RESERVED_NAMES)) {
+		for (const command of runner.getRegisteredCommands(getAcpBuiltinReservedNames())) {
 			if (isAcpBuiltinShadowedName(command.name)) continue;
 			appendCommand({
 				name: command.name,

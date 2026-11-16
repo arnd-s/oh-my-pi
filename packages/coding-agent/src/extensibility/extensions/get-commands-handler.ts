@@ -35,9 +35,9 @@ export function getSessionSlashCommands(session: CommandsCapableSession): SlashC
 	if (runner) {
 		// Wiring this callback does not need command implementations; listing commands does.
 		const {
-			BUILTIN_SLASH_COMMAND_RESERVED_NAMES,
+			getBuiltinSlashCommandReservedNames,
 		}: typeof BuiltinRegistry = require("../../slash-commands/builtin-registry");
-		for (const cmd of runner.getRegisteredCommands(BUILTIN_SLASH_COMMAND_RESERVED_NAMES)) {
+		for (const cmd of runner.getRegisteredCommands(getBuiltinSlashCommandReservedNames())) {
 			out.push({
 				name: cmd.name,
 				description: cmd.description,
