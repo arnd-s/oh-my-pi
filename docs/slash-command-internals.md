@@ -165,7 +165,7 @@ Interactive mode combines multiple command sources for autocomplete and command 
 
 At construction time it builds a pending command list from:
 
-- built-ins (`buildTuiBuiltinSlashCommands(...)`, materialized from `BUILTIN_SLASH_COMMAND_DEFS` with live argument completion and inline hints)
+- built-ins (`buildTuiBuiltinSlashCommands(...)`, materialized from the enabled builtin specs (`getEnabledBuiltinSlashCommands()`) with live argument completion and inline hints)
 - extension-registered slash commands (`extensionRunner.getRegisteredCommands(...)`)
 - TypeScript custom commands (`session.customCommands`), mapped to slash command labels
 - optional skill commands (`/skill:<name>`) when `skills.enableSkillCommands` is enabled
