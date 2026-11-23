@@ -15,6 +15,13 @@ set -x
 
 cd "$( dirname "$0" )"
 
+OLD_HEAD=$( git rev-parse HEAD )
+git pull
+if [ "$( git rev-parse HEAD )" != "$OLD_HEAD" ]; then
+    bun run build:native
+    exit
+fi
+
 git fetch upstream
 
 if [ "$VER" == "auto" ]; then
